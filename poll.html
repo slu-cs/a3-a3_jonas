@@ -1,0 +1,67 @@
+<!-- Examples of listening for events -->
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>JQuery Objects</title>
+  </head>
+  <body>
+    <form>
+      Enter a Question
+      <input type="text" name='question' id='question'>
+      <ul id='option-list'></ul>
+      <button id='add-option'>Add Option</button>
+      <button type="submit">Create Poll </button>
+    </form>
+
+    <div id='history'>
+      <h4 id="poll-header"></h4>
+      <ul id="created-options"></ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script>
+
+      let counter = 0;
+      $('#add-option').on('click', function(event) {
+        event.preventDefault();
+        $('#option-list').append( '<li><input type="text" name="option"></li>' );
+      });
+
+      $('form').on('submit', function(event) {
+        for (let option of $('#created-options').find('li')){
+          $(option).remove()
+        }
+        event.preventDefault();
+
+        // set the poll header
+        const question = $('#question').val()
+        $('#poll-header').html(question)
+
+        // set all of the options of the poll
+        const form = $(this);
+        const inputs = form.find('ul').find('input');
+        for (let input of inputs) {
+          input = $(input);
+          $('#created-options').append(`
+            <li>
+              <span>${input.val()} </span>
+              <button>Vote</button>
+              <span class='count'> 0</span>
+            </li>`);
+          input.val('');
+        }
+        $('#question').val('');
+        for (let anInput of $('#option-list').find('li')) {
+          $(anInput).remove()
+        }
+      });
+      
+      // Delete from the to-do list
+      $('#created-options').on('click', 'button', function(event) {
+        let count = $(this).closest('li').find('.count').text();
+        count = Number(count.trim())
+        $(this).closest('li').find('.count').html(` ${count + 1}`);
+      });
+
+    </script>
+  </body>
+</html>
