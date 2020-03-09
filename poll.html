@@ -2,33 +2,53 @@
 <!DOCTYPE html>
   <head>
     <meta charset="utf-8">
-    <title>JQuery Objects</title>
+    <title>Poll</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   </head>
   <body>
-    <form>
-      Enter a Question
-      <input type="text" name='question' id='question'>
-      <ul id='option-list'></ul>
-      <button id='add-option'>Add Option</button>
-      <button type="submit">Create Poll </button>
+    <nav class="navbar navbar-info bg-info">
+      <span class="navbar-brand">
+        <img src="https://img.icons8.com/cotton/2x/survey.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Pollster
+      </span>
+    </nav>
+    <form id='poll-form' class="my-3 mx-5">
+      <input 
+        placeholder="Enter a Question"
+        type="text"
+        class="form-control mb-2"
+        id='question'
+      >
+      <ul class="list-group" id='option-list'></ul>
+      <div class='mt-3'>
+        <button class="btn btn-info" id='add-option'>Add Option</button>
+        <button class="btn btn-info" type="submit">Create Poll </button>
+      </div>
     </form>
 
-    <div id='history'>
-      <h4 id="poll-header"></h4>
-      <ul id="created-options"></ul>
+    <div id='history' class="my-3 mx-5">
+      <h2 id="poll-header"></h2>
+      <ul class="list-group" id="created-options"></ul>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script>
-
+      //initiate the counter
       let counter = 0;
+
+      // add new option
       $('#add-option').on('click', function(event) {
         event.preventDefault();
-        $('#option-list').append( '<li><input type="text" name="option"></li>' );
+        $('#option-list').append(`
+        <li class="list-group-item">
+          <input placeholder="option" type="text" class="form-control" name="option">
+        </li>
+        ` );
       });
 
+      // Create the entire poll 
       $('form').on('submit', function(event) {
         for (let option of $('#created-options').find('li')){
-          $(option).remove()
+          $(option).remove();
         }
         event.preventDefault();
 
@@ -42,10 +62,17 @@
         for (let input of inputs) {
           input = $(input);
           $('#created-options').append(`
-            <li>
-              <span>${input.val()} </span>
-              <button>Vote</button>
-              <span class='count'> 0</span>
+            <li class="list-group-item">
+              <div class='row'>
+                <span class='col-9'>${input.val()} </span>
+                <div class='col'>
+                  <button class='btn btn-info'>Vote</button>
+                  <h4 class='float-right'>
+                    <span>votes </span>
+                    <span class='count'> 0</span>
+                  </h4>
+                </div>
+              </div>
             </li>`);
           input.val('');
         }
